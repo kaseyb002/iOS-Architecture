@@ -66,6 +66,7 @@ class FullScreenExampleVC: UIViewController {
 	    super.viewDidLoad()
 	    embed(childVC, into: childView)
 	}
+}
 ```
 
 #### MVVM?
