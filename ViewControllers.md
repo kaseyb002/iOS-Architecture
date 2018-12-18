@@ -56,16 +56,16 @@ extension UIViewController {
 ##### Using the `embed` func
 
 ```swift
-final class FullScreenExampleVC: UIViewController {
+class FullScreenExampleVC: UIViewController {
 
-@IBOutlet weak private var childView: UIView!
+	@IBOutlet weak private var childView: UIView!
 
-private lazy var childVC = ChildExampleVC(data: "hello")
+	private lazy var childVC = ChildExampleVC(data: "hello")
 
-override func viewDidLoad() {
-    super.viewDidLoad()
-    embed(childVC, into: childView)
-}
+	override func viewDidLoad() {
+	    super.viewDidLoad()
+	    embed(childVC, into: childView)
+	}
 ```
 
 #### MVVM?
