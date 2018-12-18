@@ -5,18 +5,34 @@ I solve the Massive View Controller problem by breaking my view controller down 
 
 If you are not aggressively breaking down your view controllers into child view controllers, I strongly suggest you try doing so. This has been the most helpful architectural technique I've ever come across in iOS development.
 
-A lot of people praise Flutter and React-Native for their "widget"-based approach to building layouts. In those platforms you create a little widget called `A`, then you can create another widget `B` composed of `A` widgets, and then create a widget `C` composed of `B` widgets and maybe other widgets, and so on. iOS has the exact same functionality with child view controllers.
+Many people praise Flutter and React-Native for their "widget"-based approach to building layouts. In those platforms you create a little widget called `A`, then you can create another widget `B` composed of `A` widgets, and then create a widget `C` composed of `B` widgets and maybe other widgets, and so on. iOS has the exact same functionality with child view controllers.
 
 ### Example
 I will walk through the `Now Playing` screen of a podcast app I'm working on.
 
 
+
 ### State Containers
-There is one particularly helpful application of child view controllers that deserves special mention. That is handling empty/loading/error/found states. By creating a child view controller for each state (`LoadingVC`, `ErrorVC`, `EmptyVC`, found - `ListTableViewController`), you can just swap each one out as needed.
+There is one particularly helpful application of child view controllers that deserves special mention. That is handling empty/loading/error/found states. By creating a child view controller for each state (e.g., `EmptyVC`, `LoadingVC`, `ErrorVC`, and `ListTableViewController` for found), you can just swap in each one as needed.
 
 
-### Code
-Here's the function I use to embed my child view controllers:
+##### How it looks in code
+
+```swift
+class FullScreenExampleVC: UIViewController {
+
+	@IBOutlet weak private var childView: UIView!
+
+	private lazy var childVC = ChildExampleVC(data: "hello")
+
+	override func viewDidLoad() {
+	    super.viewDidLoad()
+	    embed(childVC, into: childView)
+	}
+}
+```
+
+##### The `embed` func
 
 ```swift
 extension UIViewController {
@@ -53,23 +69,7 @@ extension UIViewController {
 }
 ```
 
-##### Using the `embed` func
-
-```swift
-class FullScreenExampleVC: UIViewController {
-
-	@IBOutlet weak private var childView: UIView!
-
-	private lazy var childVC = ChildExampleVC(data: "hello")
-
-	override func viewDidLoad() {
-	    super.viewDidLoad()
-	    embed(childVC, into: childView)
-	}
-}
-```
-
-#### MVVM?
+### MVVM?
 I do not like MVVM. MVVM does not solve the Massive View Controller problem. It just breaks up the view controller code into two different files: one for view logic and one for business logic. At the end of the day, the view controller itself is still massive.
 
 Occasionally I will use a ViewModel for a child view controller (or table view cell) that's being widely re-used. That way I can use several types of business/presentation logic for the same view. But it's rare.
