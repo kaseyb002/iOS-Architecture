@@ -145,6 +145,24 @@ extension GroupsEndpoint: Endpoint {
 }
 ```
 
+What's cool about having an `Endpoint` protocol is you can use inheritance. So in the previous example, I could have my `GroupsEndpoint` inherit from a more generic `PodcastEndpoint` which will provide some default data:
+
+```swift
+protocol PodcastEndpoint: Endpoint {}
+
+extension IndexingEndpoint {
+    
+    var baseUrl: String {
+        return Constants.podcastServerUrl
+    }
+    
+    var headers: HTTPHeaders {
+        return AccountAPI.authHeader ?? HTTPHeaders()
+    }
+}
+```
+
+Now I can remove the `var headers: HTTPHeaders` and `var baseUrl: String` from my `GroupsEndpoint`.
 
 ### Other Notes
 I leave my `[String:Any]`/`Parameters` free form. I find that tends to be easier than trying to create type-safe parameters for each endpoint.
