@@ -150,7 +150,7 @@ What's cool about having an `Endpoint` protocol is you can use inheritance. So i
 ```swift
 protocol PodcastEndpoint: Endpoint {}
 
-extension IndexingEndpoint {
+extension PodcastEndpoint {
     
     var baseUrl: String {
         return Constants.podcastServerUrl
@@ -160,6 +160,12 @@ extension IndexingEndpoint {
         return AccountAPI.authHeader ?? HTTPHeaders()
     }
 }
+```
+
+...and...
+
+```swift
+extension GroupsEndpoint: PodcastEndpoint {
 ```
 
 Now I can remove the `var headers: HTTPHeaders` and `var baseUrl: String` from my `GroupsEndpoint`.
