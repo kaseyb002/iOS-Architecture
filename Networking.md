@@ -19,10 +19,11 @@ class SearchVC: UIViewController {
 ```
 
 ## The Service Classes
-The `Service` classes make the network calls. Here's an example:
+The `Service` classes *route* the network calls. Here's an example:
 
 ```swift
 final class EpisodesService {
+
   private static let listenNotesService = Service<ListenNotesEndpoint>()
 
   class func searchEpisodes(with searchTerm: String, callback: @escaping (Result<EpisodeResults, NetworkError>) -> ()) {
@@ -31,3 +32,15 @@ final class EpisodesService {
   }
 }
 ```
+
+You'll see that `listenNotesService` is the dude that actually makes the network call. 
+
+Also, I should note that I leave my `[String:Any]`/`Parameters` free form. I find that tends to be easier than trying to create type-safe parameters for each endpoint.
+
+### 
+
+
+
+
+
+
