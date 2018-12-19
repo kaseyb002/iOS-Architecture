@@ -25,10 +25,9 @@ The `Service` classes make the network calls. Here's an example:
 final class EpisodesService {
     private static let listenNotesService = Service<ListenNotesEndpoint>()
 
-    class func searchEpisodes(with searchTerm: String,
-	                          callback: @escaping (Result<EpisodeResults, NetworkError>) -> ()) {
-	    let params: Parameters = ["q": searchTerm, "offset": offset]
-	    listenNotesAPI.call(.search, parameters: params, callback: callback)
+    class func searchEpisodes(with searchTerm: String, callback: @escaping (Result<EpisodeResults, NetworkError>) -> ()) {
+	    let params: Parameters = ["term": searchTerm]
+	    listenNotesService.call(.search, parameters: params, callback: callback)
 	}
 }
 ```
