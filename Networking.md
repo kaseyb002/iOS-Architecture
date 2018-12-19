@@ -1,21 +1,33 @@
 # Networking
 
-My networking classes are roughly grouped together by object types (e.g., `AccountService`, `EpisodesService`). Here's an example of a network call inside an `API` class.
+My networking classes are roughly grouped together by object types (e.g., `AccountService`, `EpisodesService`) in `Service` class. Here's an example of a network call inside an `API` class.
 
 ```swift
 final class EpisodesAPI {
 
   class func searchEpisodes(with text: String, callback: @escaping (Result<[Episode], NetworkError>) -> ()) {
-    EpisodesService.searchEpisodes(with: text) { [weak self] result in
+    EpisodesService.searchEpisodes(with: text, callback: callback)
+  }
+}
+```
+
+And here's how it looks back up in the `ViewController`:
+
+```swift
+final class SearchVC: UIViewController {
+
+  func searchEpisodes(with text: String) {
+    EpisodesAPI.searchEpisodes(with: text) { [weak self] result in
       switch result {
       case .success(let episodes):
         self?.load(episodeResults: episodes)
       case .error:
         self?.status = .error
       }
-    }		
+    }	
   }
 }
+
 ```
 
 ## Service Class
