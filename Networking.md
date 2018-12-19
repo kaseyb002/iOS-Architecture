@@ -1,6 +1,6 @@
 # Networking
 
-My networking classes are roughly grouped together by object types (e.g., `AccountService`, `EpisodesService`) in `Service` class. Here's an example of a network call inside an `API` class.
+My networking classes are roughly grouped together by object types (e.g., `AccountService`, `EpisodesService`) in a `Service` class. Here's an example of an `API` class making a `Service` network call.
 
 ```swift
 final class EpisodesAPI {
@@ -11,7 +11,7 @@ final class EpisodesAPI {
 }
 ```
 
-And here's how it looks back up in the `ViewController`:
+And here's how that looks back up in the `ViewController`:
 
 ```swift
 final class SearchVC: UIViewController {
@@ -50,6 +50,7 @@ You'll see that `podcastServer` is the dude that actually makes the network call
 ## Server Class
 The `Server` class takes a generic `Endpoint` and makes the call. The `Server` class doesn't do much; it just provides the `call()` method. The `Endpoint` is doing most of the work. Really, the `Server` class is there just for aesthetic reasons. It feels natural to write `myServer.call(endpoint)` as opposed to `endpoint.call()`.
 
+#### The Entire Server Class
 ```swift
 final class Server<E: Endpoint> {
     
@@ -89,6 +90,61 @@ final class Server<E: Endpoint> {
     }
 }
 ```
+
+## Endpoint
+`Endpoint` types provide all the data (minus parameters) for servers to make their call. Let's look at the protocol:
+
+```swift
+protocol Endpoint {
+    var baseUrl: String { get }
+    var path: String { get }
+    var url: String { get }
+    var method: HTTPMethod { get }
+    var headers: HTTPHeaders { get }
+}
+```
+
+Just create an object (enum, struct, or class) that conforms to this and you're ready to go. I typically group my `Endpoint`s by object type inside an enum class. Here's an example:
+
+```swift
+enum GroupsEndpoint {
+    case myGroups
+    case createGroup
+    case leaveGroup(id: GroupId)
+}
+
+extension GroupsEndpoint: Endpoint {
+    
+    var path: String {
+        switch self {
+        case .createGroup:
+            return "/groups/create"
+        case .myGroups:
+            return "/groups"
+        case .leave(let id):
+            return "/groups/\(id)/leave"
+        }
+    }
+    
+    var headers: HTTPHeaders {
+        return AccountAPI.authHeader ?? HTTPHeaders()
+    }
+    
+    var method: HTTPMethod {
+        switch self {
+        case .myGroups:
+            return .get
+        case .createGroup:
+            return .post
+        case .leave:
+            return .post
+        }
+    }
+    
+    var baseUrl: String { return Constants.podcastServerUrl }
+}
+```
+
 
 ### Other Notes
 I leave my `[String:Any]`/`Parameters` free form. I find that tends to be easier than trying to create type-safe parameters for each endpoint.
