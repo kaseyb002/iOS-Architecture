@@ -1,6 +1,6 @@
 # Networking
 
-My networking classes are grouped by an object type (e.g., `AccountService`, `EpisodesService`). Here's an example of a network call inside a `ViewController`
+My networking classes are roughly grouped together by object types (e.g., `AccountService`, `EpisodesService`). Here's an example of a network call inside a `ViewController`
 
 ```swift
 class SearchVC: UIViewController {
@@ -18,5 +18,17 @@ class SearchVC: UIViewController {
 }
 ```
 
-## Service Classes
-The `Service` class is where you go to make your network call for certain categories. 
+## The Service Classes
+The `Service` classes make the network calls. Here's an example:
+
+```swift
+final class EpisodesService {
+    private static let listenNotesService = Service<ListenNotesEndpoint>()
+
+    class func searchEpisodes(with searchTerm: String,
+	                          callback: @escaping (Result<EpisodeResults, NetworkError>) -> ()) {
+	    let params: Parameters = ["q": searchTerm, "offset": offset]
+	    listenNotesAPI.call(.search, parameters: params, callback: callback)
+	}
+}
+```
