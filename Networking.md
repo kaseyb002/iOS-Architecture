@@ -26,8 +26,8 @@ final class EpisodesService {
     private static let listenNotesService = Service<ListenNotesEndpoint>()
 
     class func searchEpisodes(with searchTerm: String, callback: @escaping (Result<EpisodeResults, NetworkError>) -> ()) {
-	    let params: Parameters = ["term": searchTerm]
-	    listenNotesService.call(.search, parameters: params, callback: callback)
+		let params: Parameters = ["term": searchTerm]
+		listenNotesService.call(.search, parameters: params, callback: callback)
 	}
 }
 ```
