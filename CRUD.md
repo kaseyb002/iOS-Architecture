@@ -1,17 +1,7 @@
 # Create, Read, Update, and Deleting Data
-I create a separate `API` class for all data transformations. I try to model these `API` classes as if you were calling a backend API (which you often are). I roughly group them by object types (e.g.,`EpisodesAPI`, `AccountAPI`).
+I create a separate `API` class for all data transformations. I try to model these `API` classes as if you were calling a backend API. I roughly group them by object types (e.g.,`EpisodesAPI`, `AccountAPI`).
 
 `ViewControllers` use the `API` classes a one-stop-shop for all CRUD operations. For example, whether an object should be saved locally or to iCloud, read from the backend or the cache, the `API` will take care of all those details.
-
-## Passive models, active `API`s
-
-My data model objects are always passive. They don't do any CRUD operations. So for example, my `Episode` struct will never have a method like `savePosition()`. Instead, I would use the `EpisodesAPI` do that:
-
-```swift
-EpisodesAPI.saveEpisode(id: EpisodeId, atPosition: TimeInterval)
-```
-
-The point is all data transformations happen inside the `API` classes. The active `API` classes act on the passive models.
 
 Let's look inside the that `saveEpisode()`.
 
@@ -23,6 +13,14 @@ final class EpisodesAPI {
     EpisodesService.saveEpisode(id: EpisodeId, atPosition: position)
   }
 }
+```
+
+## Passive models, active `API`s
+
+My data model objects are always passive. They don't do any CRUD operations. So for example, my `Episode` struct will never have a method like `savePosition()`. Instead, I would use `EpisodesAPI.saveEpisode(id: EpisodeId, atPosition: TimeInterval)` do that.
+
+```swift
+EpisodesAPI.saveEpisode(id: EpisodeId, atPosition: TimeInterval)
 ```
 
 ## Models
